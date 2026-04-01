@@ -1,0 +1,10 @@
+[
+    {
+        "book_id": "1",
+        "title": "Harry Potter ",
+        "author": "J.K Rolling",
+        "status": "Available",
+        "issued_to": null,
+        "due_date": null
+    }
+]
