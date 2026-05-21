@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "username": "user",
+        "message": "Success: You returned 'Harry Potter ' successfully. Fines added: \u20b90.0.",
+        "type": "Success",
+        "is_read": true,
+        "created_at": "2026-05-21 11:23:33"
+    }
+]

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records - Central Library Management</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19,2H6A3,3,0,0,0,3,5V19a3,3,0,0,0,3,3H19a1,1,0,0,0,1-1V3A1,1,0,0,0,19,2ZM6,4H18V20H6a1,1,0,0,1-1-1V5A1,1,0,0,1,6,4Z"/>
+                    <path d="M7,6H16a1,1,0,0,0,0-2H7a1,1,0,0,0,0,2Z"/>
+                    <path d="M7,10H16a1,1,0,0,0,0-2H7a1,1,0,0,0,0,2Z"/>
+                </svg>
+                <h2>CENTRAL LIBRARY</h2>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="admin-only">
+                    <a href="add_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Add Book</span>
+                    </a>
+                </li>
+                <li class="user-only">
+                    <a href="issue_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 19V6m-7 7l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Issue Book</span>
+                    </a>
+                </li>
+                <li class="user-only">
+                    <a href="return_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v13m-7-7l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Return Book</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="search_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Search Books</span>
+                    </a>
+                </li>
+                <li class="admin-only">
+                    <a href="student_records.html" class="sidebar-link active">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2"/></svg>
+                        <span>Student Records</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-tag">
+                    <div class="user-tag-avatar" id="sidebarAvatar">A</div>
+                    <div class="user-tag-info">
+                        <div class="user-tag-name" id="sidebarUsername">Admin</div>
+                        <div class="user-tag-role" id="sidebarRole">Admin</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Workspace -->
+        <main class="main-wrapper">
+            <header class="navbar">
+                <div class="navbar-title">Student Records Audits</div>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </header>
+
+            <section class="content-body">
+                <div id="studentRecordsAlerts"></div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📚 Student Loans & Fine Management Ledger</h2>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="custom-table" id="studentRecordsTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Book Title</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Pending Dues</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="static/js/mockData.js"></script>
+    <script src="static/js/app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Guard role access
+            const user = API.getCurrentUser();
+            if (user && user.role !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+            loadStudentRecords();
+        });
+
+        async function loadStudentRecords() {
+            const tbody = document.querySelector("#studentRecordsTable tbody");
+            if (!tbody) return;
+
+            try {
+                const records = await API.getAdminRecords();
+
+                if (records.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-secondary);">No borrow or fine transactions recorded in the library yet.</td></tr>`;
+                    return;
+                }
+
+                let html = '';
+                records.forEach(r => {
+                    let statusClass = 'available';
+                    let statusLabel = r.status;
+                    let fineToRender = '₹0';
+                    let actionButton = '';
+
+                    // Active Loans
+                    if (r.status === 'Issued') {
+                        statusClass = r.overdue ? 'overdue' : 'issued';
+                        statusLabel = r.overdue ? 'Overdue' : 'Issued';
+                        fineToRender = r.pending_fine > 0 ? `<span style="color: var(--danger-text)">₹${r.pending_fine}</span>` : '₹0';
+                        actionButton = '<span style="color: var(--text-secondary)">Active Loan</span>';
+                    } 
+                    // Past Fines
+                    else if (r.status === 'Pending') {
+                        statusClass = 'overdue';
+                        statusLabel = 'Pending Fine';
+                        fineToRender = `<span style="color: var(--danger-text); font-weight: bold;">₹${r.pending_fine}</span>`;
+                        actionButton = `<button onclick="settleFineHandler('${r.username}', '${r.book_id}', ${r.pending_fine})" class="btn btn-success btn-sm">Clear Fine</button>`;
+                    } else if (r.status === 'Paid') {
+                        statusClass = 'available';
+                        statusLabel = 'Fine Settled';
+                        fineToRender = `<span style="color: var(--success-text)">Paid: ₹${r.paid_fine}</span>`;
+                        actionButton = '<span style="color: var(--success-text)">Settled</span>';
+                    }
+
+                    html += `
+                        <tr>
+                            <td><strong>${r.username}</strong></td>
+                            <td>${r.title}</td>
+                            <td>${r.issue_date}</td>
+                            <td>${r.due_date}</td>
+                            <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
+                            <td>${fineToRender}</td>
+                            <td>${actionButton}</td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch (e) {
+                console.error("Error loading student audits records: ", e);
+            }
+        }
+
+        async function settleFineHandler(studentName, bookId, amount) {
+            if (!confirm(`Confirm fine payment of ₹${amount} received from '${studentName}'?`)) return;
+
+            try {
+                await API.payFine(studentName, bookId);
+                showAlert("studentRecordsAlerts", `Success: Settle fine of ₹${amount} for student '${studentName}' logged successfully.`, "success");
+                loadStudentRecords();
+            } catch (err) {
+                showAlert("studentRecordsAlerts", err.message, "danger");
+            }
+        }
+    </script>
+</body>
+</html>

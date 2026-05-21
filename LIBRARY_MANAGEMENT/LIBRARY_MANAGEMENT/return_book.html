@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Book - Central Library Management</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19,2H6A3,3,0,0,0,3,5V19a3,3,0,0,0,3,3H19a1,1,0,0,0,1-1V3A1,1,0,0,0,19,2ZM6,4H18V20H6a1,1,0,0,1-1-1V5A1,1,0,0,1,6,4Z"/>
+                    <path d="M7,6H16a1,1,0,0,0,0-2H7a1,1,0,0,0,0,2Z"/>
+                    <path d="M7,10H16a1,1,0,0,0,0-2H7a1,1,0,0,0,0,2Z"/>
+                </svg>
+                <h2>CENTRAL LIBRARY</h2>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="admin-only">
+                    <a href="add_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Add Book</span>
+                    </a>
+                </li>
+                <li class="user-only">
+                    <a href="issue_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 19V6m-7 7l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Issue Book</span>
+                    </a>
+                </li>
+                <li class="user-only">
+                    <a href="return_book.html" class="sidebar-link active">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v13m-7-7l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Return Book</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="search_book.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <span>Search Books</span>
+                    </a>
+                </li>
+                <li class="admin-only">
+                    <a href="student_records.html" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2"/></svg>
+                        <span>Student Records</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-tag">
+                    <div class="user-tag-avatar" id="sidebarAvatar">U</div>
+                    <div class="user-tag-info">
+                        <div class="user-tag-name" id="sidebarUsername">Username</div>
+                        <div class="user-tag-role" id="sidebarRole">Student</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Workspace -->
+        <main class="main-wrapper">
+            <header class="navbar">
+                <div class="navbar-title">Return Outstanding Books</div>
+                
+                <div class="navbar-controls">
+                    <!-- Bell -->
+                    <div class="nav-bell-container" id="bellWrapper">
+                        <button class="nav-bell-btn" id="bellBtn">
+                            <svg id="bellIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span class="nav-bell-badge" id="bellBadge">0</span>
+                        </button>
+                        <div class="notifications-dropdown" id="notificationsDropdown">
+                            <div class="notifications-header">
+                                <h3>Notifications</h3>
+                                <a href="#" class="notifications-mark-read" id="markReadLink">Mark all read</a>
+                            </div>
+                            <div class="notifications-list" id="notificationsList"></div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </header>
+
+            <section class="content-body">
+                <div id="returnBookAlerts"></div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>📚 Your Currently Borrowed Books</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="custom-table" id="borrowedBooksTable">
+                            <thead>
+                                <tr>
+                                    <th>Book Title</th>
+                                    <th>Author</th>
+                                    <th>Issue Date</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Fine Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="static/js/mockData.js"></script>
+    <script src="static/js/app.js"></script>
+    <script src="static/js/notifications.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Guard role access
+            const user = API.getCurrentUser();
+            if (user && user.role === 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+            loadBorrowedBooks();
+        });
+
+        async function loadBorrowedBooks() {
+            const tbody = document.querySelector("#borrowedBooksTable tbody");
+            if (!tbody) return;
+
+            const currentUser = API.getCurrentUser();
+            if (!currentUser) return;
+
+            try {
+                const books = await API.getBooks();
+                const borrowed = books.filter(b => b.issued_to === currentUser.username);
+
+                if (borrowed.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-secondary);">You have no active borrowed books. Happy reading!</td></tr>`;
+                    return;
+                }
+
+                let html = '';
+                const today = new Date();
+
+                borrowed.forEach(b => {
+                    const due = new Date(b.due_date);
+                    let fine = 0;
+                    let statusClass = 'available';
+                    let statusText = 'Issued';
+
+                    if (today > due) {
+                        const diffTime = Math.abs(today - due);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        fine = diffDays * 5; // ₹5 per day
+                        statusClass = 'overdue';
+                        statusText = 'Overdue';
+                    } else {
+                        const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+                        if (diffDays <= 2) {
+                            statusClass = 'issued';
+                            statusText = 'Due Soon';
+                        }
+                    }
+
+                    html += `
+                        <tr>
+                            <td><strong>${b.title}</strong></td>
+                            <td>${b.author}</td>
+                            <td>${b.issue_date || 'N/A'}</td>
+                            <td>${b.due_date}</td>
+                            <td><span class="status-pill ${statusClass}">${statusText}</span></td>
+                            <td><strong style="color: ${fine > 0 ? 'var(--danger-text)' : 'inherit'}">₹${fine}</strong></td>
+                            <td>
+                                <button onclick="returnBookHandler('${b.book_id}', '${escape(b.title)}')" class="btn btn-secondary btn-sm">
+                                    Return Book
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = html;
+            } catch (e) {
+                console.error("Error loading borrowed books list: ", e);
+            }
+        }
+
+        async function returnBookHandler(bookId, escapedTitle) {
+            const title = unescape(escapedTitle);
+            if (!confirm(`Are you sure you want to return '${title}'?`)) return;
+
+            try {
+                const res = await API.returnBook(bookId);
+                const fine = res.fine_incurred || 0;
+                
+                if (fine > 0) {
+                    alert(`Returned successfully!\n\nLATE RETURN PENALTY INCCURED: ₹${fine}.\nPlease visit the main desk to settle this fine.`);
+                    showAlert("returnBookAlerts", `Success: '${title}' returned. Late fine of ₹${fine} added to your record.`, "warning");
+                } else {
+                    showAlert("returnBookAlerts", `Success: '${title}' has been successfully returned.`, "success");
+                }
+
+                loadBorrowedBooks();
+
+                // Re-render bell dropdown counts
+                if (window.NotificationSystem) {
+                    window.NotificationSystem.renderNotificationsUI();
+                }
+            } catch (err) {
+                showAlert("returnBookAlerts", err.message, "danger");
+            }
+        }
+    </script>
+</body>
+</html>

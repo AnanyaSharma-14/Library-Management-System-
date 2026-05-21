@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.head-section {
+  background: linear-gradient(to right, #c4b6fd, #93acfc);
+}
+
+h1 {
+  color: #0a58ca;
+}
+
+p {
+  font-size: 18px;
+}
+
+.btn-primary {
+  background-color: #0a58ca;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #084298;
+}
